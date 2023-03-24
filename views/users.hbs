@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách người dùng</title>
+  <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/fonts.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="pb-2">Danh sách người dùng</h1>
+    <nav aria-label="breadcrumb" class="mt-2 mb-2">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fa fa-home pe-2"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Users</a> </li>
+        <li class="breadcrumb-item active" aria-current="page">List users</li>
+      </ol>
+    </nav>
+    {{#if users}}
+    <table class="table-light table table-striped table-hover shadow-sm ">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Ảnh</th>
+          <th>Họ và tên</th>
+          <th>Email</th>
+          <th>Chức năng khác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+        <tr>
+          <td>{{@index}}</td>
+          <td>
+            {{#if avatar}}
+            <img src="{{avatar}}" alt="Avatar" class="rounded-circle" width="50">
+            {{else}}
+            <img src="/images/logo.png" alt="Avatar" class="rounded-circle" width="50">
+            {{/if}}
+          </td>
+
+          <td>{{name}}</td>
+          <td>{{email}}</td>
+          <td>
+            <a href="/users/{{id}}" class="btn btn-primary shadow-sm fs-button">Chi tiết</a>
+            <a href="/users/edit/{{id}}" class="btn btn-warning shadow-sm fs-button">Sửa</a>
+            <a href=" /users/delete/{{id}}" class="btn btn-danger shadow-sm fs-button">Xóa</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+    <p class="fs-4 mt-5 text-center text-danger">Chưa có dữ liệu</p>
+    {{/if}}
+  </div>
+</body>
+
+</html>

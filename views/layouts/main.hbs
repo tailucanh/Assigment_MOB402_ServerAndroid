@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/fonts.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row flex-nowrap">
+      <div class="col-auto col-md-3 col-lg-2 px-sm-2 px-0 bg-dark-subtle shadow-lg" id="sidebar">
+        <div
+          class="d-flex flex-column justify-content-between align-items-center align-items-sm-center pt-2 min-vh-100">
+          <div class="mb-md-0 me-md-auto m-auto">
+            <a href="#">
+              <img src='/images/logo.png' width="70" alt="Logo" />
+            </a>
+
+
+          </div>
+
+          <ul class="nav nav-sidebar nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            id="menu">
+            <li class="nav-item">
+              <a href="/admin" class="nav-link align-middle px-0">
+                <i class="fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline text-black">Trang chủ</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/products" class="nav-link px-0 align-middle">
+                <i class="fa-solid fa-shirt"></i></i> <span class="ms-1 d-none d-sm-inline text-black">Sản
+                  phẩm</span></a>
+            </li>
+
+            <li>
+              <a href="/users" class="nav-link px-0 align-middle">
+                <i class="fa-solid fa-users"></i></i> <span class="ms-1 d-none d-sm-inline text-black">Người dùng</span>
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="dropdown pb-4">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+              id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="/images/logo.png" width="35" height="35" class="rounded-circle me-3">
+              <span class="d-none d-sm-inline text-black">Tài khoản</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu text-small ">
+              <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+              <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col py-3 px-4">
+        {{{body}}}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $('.nav-link').on('click', function () {
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

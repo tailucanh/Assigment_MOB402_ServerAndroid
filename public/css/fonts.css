@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400, 500,600,700,800,9ee&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+@font-face {
+  font-family: "Booter";
+  src: url("/fonts/Booter_Zero.woff") format("woff");
+}
+@font-face {
+  font-family: "Mali";
+  src: url("/fonts/mali.ttf") format("ttf");
+}
+.text-logo {
+  font-family: "Booter";
+  font-size: 3rem;
+  color: rgb(202, 151, 12);
+}
+.text-logo:hover {
+  font-family: "Booter";
+  font-size: 3rem;
+  color: rgb(230, 201, 121);
+}
+.text-title-form {
+  font-family: "Mali";
+}
+
+.fa-shirt {
+  color: rgb(218, 126, 35);
+}
+.fa-shirt:hover {
+  color: rgb(234, 177, 121);
+}
+
+.fa-users {
+  color: rgb(75, 74, 73);
+}
+.fa-users:hover {
+  color: rgb(156, 155, 154);
+}
+.fs-button {
+  font-size: 0.7rem;
+}

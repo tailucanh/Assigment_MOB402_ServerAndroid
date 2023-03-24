@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập</title>
+  <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/sidebarHidden.css">
+
+</head>
+
+<body>
+  <div class="container-fluid" id="login-content">
+    <div class="row d-flex ">
+      <section class="vh-100">
+        <div class="container h-custom">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <p class="text-center h1 fw-semibold mb-3 mx-1 mx-md-3 mt-3 text-title-form">Đăng nhập</p>
+            <div class="col-md-9 col-lg-5 col-xl-5">
+              <img src="/images/ic_login.png" class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-7 col-xl-6 offset-xl-1">
+              <form action="/login" method="post">
+                <div class="form-outline mb-3">
+                  <label for="email" class="form-label fw-semibold">Email</label>
+                  <input type="email" id="email" name="email" class="form-control form-control-lg"
+                    placeholder="Nhập email" required />
+
+                </div>
+
+                <div class="form-outline mb-3">
+                  <label for="password" class="form-label fw-semibold">Password</label>
+                  <input type="password" id="password" name="password" class="form-control form-control-lg"
+                    placeholder="Nhập password" required />
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <a href="#!" class="text-body px-3">Quên mật khẩu ?</a>
+                </div>
+
+                <div class="text-center text-lg-start mt-4 pt-2">
+                  <button type="submit" class="btn btn-primary shadow-sm btn-lg"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng nhập</button>
+                  <p class="small mt-2 pt-1 mb-3 ">Bạn chưa có tài khoản? <a href="/register"
+                      class="link-danger h6 px-2">Đăng kí ngay</a>
+                  </p>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</body>
+
+</html>
