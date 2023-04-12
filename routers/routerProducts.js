@@ -4,130 +4,201 @@ const fs = require("fs");
 const app = express();
 const bodyParser = require("body-parser");
 const multer = require("multer");
-var dir = "D:/Android/AndroidPoly/MOB402_Android_Server/Assigment/uploads";
+const { secret } = require("../helpers/api");
+const cookieParser = require("cookie-parser");
+const ProductModel = require("../models/Product");
+const middleware = require("../helpers/middleware");
 
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    let fileName = file.originalname;
-    arr = fileName.split(".");
-    let newFileName = "";
-    for (let i = 0; i < arr.length; i++) {
-      if (i != arr.length - 1) {
-        newFileName += arr[i] + ".";
-      } else {
-        newFileName += "-" + Date.now() + "." + arr[i];
-      }
-    }
-
-    cb(null, newFileName);
-  },
-});
+router.use(cookieParser());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 var upload = multer({
-  storage: storage,
-}).single("img_product");
-
-var listProduct = [
-  {
-    id: 1,
-    imgProduct: "",
-    name: "Áo khoác",
-    price: 200000,
-    type: "Áo",
-    client: "Lê Văn A",
-    description: "",
-  },
-  {
-    id: 1,
-    imgProduct: "",
-    name: "Quần baggy",
-    price: 500000,
-    type: "Quần",
-    client: "Lê Văn B",
-    description: "",
-  },
-];
-
-router.get("/", (req, res) => {
-  res.render("products", {
-    title: "Products",
-    active: { products: true },
-    listProduct,
-  });
+  storage: multer.memoryStorage(),
 });
 
-router.post("/", function (req, res) {
-  upload(req, res, function (err) {
-    let img = req.file;
+router.get("/", middleware, async (req, res) => {
+  const productsPerPage = 5;
+  const page = parseInt(req.query.page) || 1;
+  const skip = (page - 1) * productsPerPage;
 
-    const { name, price, type_product, client, desc } = req.body;
-    const id = listProduct.length + 1;
-    const imgProduct = img.path;
-    const product = {
-      id,
-      imgProduct,
-      name,
-      price,
-      type_product,
-      client,
-      desc,
-    };
-    if (name || price || type_product) {
-      listProduct.push(product);
-      console.log(listProduct);
+  var arrProduct = await ProductModel.find()
+    .lean()
+    .skip(skip)
+    .limit(productsPerPage);
 
-      res.redirect("/products");
+  arrProduct = arrProduct.map((product, index) => {
+    product.index = index + 1;
+    return product;
+  });
+  const totalProducts = await ProductModel.countDocuments();
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+  if (arrProduct.length > 0) {
+    for (let product of arrProduct) {
+      const base64Image = product.image.data.toString("base64");
+      product.image.data = base64Image;
     }
-  });
-});
-router.get("/delete/:id", function (req, res) {
-  var id = req.params.id;
-  listProduct = listProduct.filter(function (product) {
-    return product.id != id;
-  });
-  res.redirect("/products");
-});
-
-router.get("/edit/:id", function (req, res) {
-  const productId = req.params.id;
-  const product = listProduct.find((p) => p.id === productId);
-
-  if (!product) {
-    return res.status(404).send("Product not found");
   }
-  console.log(product);
 
-  res.render("/products", { listProduct: listProduct, editProduct: product });
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push({
+      pageNum: i,
+      isCurrent: i === page,
+    });
+  }
+  const prevPage = page > 1 ? page - 1 : null;
+  const nextPage = page < totalPages ? page + 1 : null;
+  const user = req.user;
+  let isUser = [];
+  isUser.name = user.name;
+  isUser.email = user.email;
+  isUser.isAdmin = user.userAuthorization;
+  isUser.avatar = user.avatar;
+  if (isUser.avatar.data.length > 13) {
+    const base64ImageAvatar = isUser.avatar.data.toString("base64");
+    isUser.avatar.data = base64ImageAvatar;
+    isUser.avatar.contentType = user.avatar.contentType;
+  }
+
+  if (isUser.isAdmin) {
+    res.render("products", {
+      title: "Products",
+      arrProduct,
+      prevPage,
+      nextPage,
+      pages,
+      isUser,
+      totalProducts,
+    });
+  } else {
+    res.redirect("/home");
+  }
 });
 
-router.post("/edit", (req, res) => {
-  upload(req, res, function (err) {
-    const { name, price, type_product, client, desc } = req.body;
-    const productId = parseInt(req.params.id);
-    const product = listProduct.find((p) => p.id === productId);
-    let imgProduct = req.file;
-
-    product.imgProduct = imgProduct;
-    product.name = name;
-    product.price = price;
-    product.client = client;
-    product.type_product = type_product;
-    product.desc = desc;
-
-    if (name || price || type_product) {
-      console.log(listProduct);
-      res.redirect("/products");
+router.post(
+  "/add_item",
+  middleware,
+  upload.single("img_product"),
+  async function (req, res) {
+    const { name, price, type, desc } = req.body;
+    if (req.file && req.file.buffer) {
+      const fileData = req.file.buffer;
+      const product = new ProductModel({
+        image: { data: fileData, contentType: req.file.mimetype },
+        name: name,
+        price: price,
+        type: type,
+        desc: desc,
+      });
+      if (name || price || type) {
+        try {
+          await product.save();
+          res.status(200).json({
+            success: true,
+            message: "Thêm sản phẩm thành công.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Đã có lỗi xảy ra. Hãy thử lại.",
+          });
+        }
+      }
+    } else {
+      const product = new ProductModel({
+        image: { data: "", contentType: "" },
+        name: name,
+        price: price,
+        type: type,
+        desc: desc,
+      });
+      if (name || price || type) {
+        try {
+          await product.save();
+          res.status(200).json({
+            success: true,
+            message: "Thêm sản phẩm thành công.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Đã có lỗi xảy ra. Hãy thử lại.",
+          });
+        }
+      }
     }
-  });
+  }
+);
+
+router.get("/delete/:id", middleware, async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const deletedProduct = await ProductModel.findByIdAndDelete(productId);
+    if (!deletedProduct) {
+      res.status(200).json({
+        success: false,
+        message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Xóa sản phẩm thành công.",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Đã có lỗi xảy ra. Hãy thử lại.",
+    });
+  }
 });
+
+router.post(
+  "/update/:id",
+  upload.single("img_product"),
+  middleware,
+  async (req, res) => {
+    const productId = req.params.id;
+    console.log(productId);
+    const { name, price, type, desc } = req.body;
+    let updatedData = {};
+    updatedData.name = name;
+    updatedData.price = price;
+    updatedData.type = type;
+    updatedData.desc = desc;
+    if (req.file && req.file.buffer) {
+      updatedData.image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+    if (name || price || type) {
+      try {
+        const updateProduct = await ProductModel.findByIdAndUpdate(
+          productId,
+          updatedData,
+          {
+            new: true,
+          }
+        );
+        if (!updateProduct) {
+          res.status(500).json({
+            success: false,
+            message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+          });
+        }
+        res.status(500).json({
+          success: true,
+          message: "Cập nhật sản phẩm thành công.",
+        });
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: "Đã có lỗi xảy ra. Hãy thử lại.",
+        });
+      }
+    }
+  }
+);
 
 module.exports = router;

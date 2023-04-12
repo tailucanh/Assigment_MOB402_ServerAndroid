@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400, 500,600,700,800,9ee&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Signika&display=swap");
 * {
   font-family: "Poppins", sans-serif;
 }
@@ -7,37 +7,75 @@
   font-family: "Booter";
   src: url("/fonts/Booter_Zero.woff") format("woff");
 }
-@font-face {
-  font-family: "Mali";
-  src: url("/fonts/mali.ttf") format("ttf");
+
+.fixed-top {
+  position: fixed;
+  top: 10px;
+  left: 0;
+  width: 80%;
+  min-height: 50px;
+  max-height: 200px;
+  margin-bottom: 5px;
+  z-index: 999;
+  overflow: hidden;
+  animation: slideInDown 0.2s;
 }
+
+.alert.fade.show {
+  top: 20px;
+}
+
+form i {
+  cursor: pointer;
+}
+
 .text-logo {
   font-family: "Booter";
+  font-weight: 700;
+  color: #5299ea;
   font-size: 3rem;
-  color: rgb(202, 151, 12);
 }
 .text-logo:hover {
   font-family: "Booter";
   font-size: 3rem;
-  color: rgb(230, 201, 121);
+
+  color: #7eb1ea;
 }
 .text-title-form {
-  font-family: "Mali";
+  font-family: "Signika", sans-serif;
 }
 
-.fa-shirt {
-  color: rgb(218, 126, 35);
-}
-.fa-shirt:hover {
-  color: rgb(234, 177, 121);
-}
-
-.fa-users {
-  color: rgb(75, 74, 73);
-}
-.fa-users:hover {
-  color: rgb(156, 155, 154);
-}
 .fs-button {
   font-size: 0.7rem;
+}
+
+#ic-name,
+#ic-email,
+#ic-password,
+#ic-re-password {
+  color: #3382dc;
+}
+
+form .input-group {
+  border: 1px solid rgb(194, 194, 194);
+  border-radius: 5px;
+}
+form .input-group .form-control {
+  border: none;
+  outline: none;
+}
+form .input-group .form-control:focus {
+  box-shadow: none;
+}
+
+form .input-group:focus {
+  border: 2px solid black;
+}
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

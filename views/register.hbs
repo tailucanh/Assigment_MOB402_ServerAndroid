@@ -8,86 +8,158 @@
   <title>Đăng kí</title>
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
-  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/sidebarHidden.css">
+  <link rel="stylesheet" href="/css/slideShowStyle.css">
+  <link rel="stylesheet" href="/css/loadingStyle.css">
 </head>
 
 <body>
-  <div class="container h-100  mb-4" id="register-content">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-lg-12 col-xl-11">
-        <div class="card text-black" style="border-radius: 25px;">
-          <div class="card-body p-md-2">
-            <div class="row justify-content-around">
-              <div class="col-md-10 col-lg-6 col-xl-6 order-2 order-lg-1">
-                <p class="text-center h1 fw-semibold mb-2 mx-1 mx-md-3 mt-1 text-title-form">Đăng kí</p>
-                <form class="mx-1 mx-md-4" enctype="multipart/form-data" method="POST">
-                  <div class="d-flex flex-column align-items-center mb-3">
-                    <img src="/images/logo.png" class="rounded-circle shadow-4 mb-1"
-                      style="width: 90px; height: 90px; object-fit: cover;" alt="Avatar" id="view_avatar" />
-                    <input class="form-control form-control-sm" id="avatar" type="file" name="avatar">
-                  </div>
-                  <div class="d-flex flex-row align-items-start mb-2">
-                    <i class="fas fa-user fa-lg me-1 mt-2 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <label class="form-label" for="form3Example1c">Họ và tên</label>
-                      <input type="text" id="name" name="name" class="form-control" placeholder="Le Van A" required />
-                      <p class="mx-2 mt-1 text-danger">{{errName}}</p>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-row align-items-start mb-2">
-                    <i class="fas fa-envelope fa-lg me-1 mt-2 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <label class="form-label" for="form3Example3c">Email</label>
-                      <input type="email" id="email" name="email" class="form-control" placeholder="abc@gmail.com"
-                        required />
-                      <p class="mx-2 mt-1 text-danger">{{errEmail}}</p>
-                    </div>
-                  </div>
 
-                  <div class="d-flex flex-row align-items-start mb-2">
-                    <i class="fas fa-lock fa-lg me-1 mt-2 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <label class="form-label" for="form3Example4c">Password</label>
-                      <input type="password" id="password" name="password" class="form-control" required />
-                      <p class="mx-2 mt-1  text-danger">{{errPass}}</p>
-                    </div>
-                  </div>
+  <div class="container-fluid h-100 mb-4">
+    <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+      role="alert" id="my-alert">
+      <div class="d-flex align-items-center text-center">
+        <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
+        <span id="error-message" class="fs-5 text-dark"></span>
+      </div>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert"></i>
+    </div>
 
+    <div class="row container-fluid d-flex justify-content-center align-items-center col-lg-12 col-xl-12 mt-2">
+      <div class="d-flex col-md-12 col-lg-6 col-xl-6 order-1 order-lg-1 justify-content-end align-items-end">
+        <div class="d-flex flex-column col-md-12 col-lg-9 col-xl-9 ">
+          <a class="navbar-brand" href="#">
+            <img src="/images/logo.png" alt="Bootstrap" class="img-fluid" style="width: 150px;height: auto">
+          </a>
+          <span class="h5 fw-semibold mt-2 text-title-form">Chào mừng đến với
+            <span class="fs-2 text-logo">SMILE STORE</span>
+          </span>
+          <p class="fs-6 fw-normal mb-4 text-wrap text-body-secondary">Hãy đăng kí để sử dụng những dịch vụ cần
+            thiết
+            của
+            bạn.
+          </p>
+          <form method="POST" enctype="multipart/form-data" id="registerForm">
 
-                  <div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
-                    <button type="submit" class="btn btn-primary shadow-sm  btn-lg">Đăng kí</button>
-                  </div>
-
-                </form>
-              </div>
-              <div class="col-md-10 col-lg-6 col-xl-6 d-flex justify-content-center order-1 order-lg-2">
-                <img src="/images/ic_regiser.png" class="img-fluid" alt="Sample image">
+            <div class="d-flex flex-column align-items-start mb-2">
+              <label class="form-label text-dark fw-semibold" style="--bs-text-opacity: .8;" for="name">Họ và
+                tên</label>
+              <div class="input-group" id="input-name">
+                <span class="input-group-text bg-white border border-0"> <i class="fas fa-user" id="ic-name"></i></span>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Le Van A" />
               </div>
             </div>
+            <div class="d-flex flex-row align-items-start mb-2">
+              <div class="form-outline flex-fill mb-0">
+                <label class="form-label text-dark fw-semibold" style="--bs-text-opacity: .8;" for="email">Email</label>
+                <div class="input-group" id="input-email">
+                  <span class="input-group-text bg-white border border-0"> <i class="fas fa-envelope"
+                      id="ic-email"></i></span>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="abc@gmail.com" />
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-row align-items-start mb-2">
+              <div class="form-outline flex-fill mb-0">
+                <label class="form-label text-dark fw-semibold" style="--bs-text-opacity: .8;" for="password">Mật
+                  khẩu</label>
+                <div class="input-group align-items-center" id="input-password">
+                  <span class="input-group-text bg-white border border-0"> <i class="fas fa-lock"
+                      id="ic-password"></i></span>
+                  <input type="password" id="password" name="password" class="form-control" />
+                  <i class="fa-regular fa-eye-slash input-group-text  bg-white border border-0" id="togglePassword"></i>
+                </div>
+
+              </div>
+            </div>
+            <div class="d-flex flex-row align-items-start mb-2">
+              <div class="form-outline flex-fill  mb-0">
+                <label class="form-label text-dark fw-semibold" style="--bs-text-opacity: .8;" for="re_password">Nhập
+                  lại mật khẩu</label>
+                <div class="input-group align-items-center" id="input-re-password">
+                  <span class="input-group-text  bg-white border border-0"> <i class="fas fa-lock"
+                      id="ic-re-password"></i></span>
+                  <input type="password" id="re_password" name="re_password" class="form-control" />
+                  <i class="fa-regular fa-eye-slash input-group-text bg-white border border-0"
+                    id="toggleRePassword"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-lg-start mt-4 mb-2 mb-lg-4">
+              <button type="submit" class="btn btn-primary shadow-sm form-control" id="btn-register">Đăng
+                kí</button>
+              <p class="small mt-4 mb-3 text-dark">Bạn đã có tài khoản? <a href="/login"
+                  class="link-primary h6 px-2 fw-semibold">Đăng nhập ngay</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div
+        class="col-md-12 col-lg-6 col-xl-6 d-flex flex-column justify-content-center  justify-content-md-center order-2 order-lg-2">
+        <div class="slideshow-container col-md-12 col-lg-11 col-xl-11">
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_register.png" class="img-fluid" alt="Sample image">
           </div>
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_shop_0.png" class="img-fluid" alt="Sample image">
+          </div>
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_shop_1.png" class="img-fluid" alt="Sample image">
+          </div>
+
+        </div>
+        <br>
+        <div style="text-align:center">
+          <span class="dot" onclick="currentSlide(1)"></span>
+          <span class="dot" onclick="currentSlide(2)"></span>
+          <span class="dot" onclick="currentSlide(3)"></span>
         </div>
       </div>
     </div>
+    <div id="loading-overlay">
+      <div class="boxes">
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-  <script>
-    const imageInput = document.getElementById('avatar');
-    const imagePreview = document.getElementById('view_avatar');
 
-    imageInput.addEventListener('change', function () {
-      const file = imageInput.files[0];
-      const reader = new FileReader();
-      reader.addEventListener('load', function () {
-        imagePreview.src = reader.result;
-      });
 
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    });
 
-  </script>
+
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="/Js/registerForm.js"></script>
+  <script src="/Js/autoSlide.js"></script>
+
 </body>
 
 </html>

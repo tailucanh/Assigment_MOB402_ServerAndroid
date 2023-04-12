@@ -9,57 +9,130 @@
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
   <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/sidebarHidden.css">
-
+  <link rel="stylesheet" href="/css/slideShowStyle.css">
+  <link rel="stylesheet" href="/css/loadingStyle.css">
 </head>
 
 <body>
+
   <div class="container-fluid" id="login-content">
-    <div class="row d-flex ">
-      <section class="vh-100">
-        <div class="container h-custom">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <p class="text-center h1 fw-semibold mb-3 mx-1 mx-md-3 mt-3 text-title-form">Đăng nhập</p>
-            <div class="col-md-9 col-lg-5 col-xl-5">
-              <img src="/images/ic_login.png" class="img-fluid" alt="Sample image">
-            </div>
-            <div class="col-md-8 col-lg-7 col-xl-6 offset-xl-1">
-              <form action="/login" method="post">
-                <div class="form-outline mb-3">
-                  <label for="email" class="form-label fw-semibold">Email</label>
-                  <input type="email" id="email" name="email" class="form-control form-control-lg"
-                    placeholder="Nhập email" required />
-
-                </div>
-
-                <div class="form-outline mb-3">
-                  <label for="password" class="form-label fw-semibold">Password</label>
-                  <input type="password" id="password" name="password" class="form-control form-control-lg"
-                    placeholder="Nhập password" required />
-
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center">
-                  <a href="#!" class="text-body px-3">Quên mật khẩu ?</a>
-                </div>
-
-                <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="submit" class="btn btn-primary shadow-sm btn-lg"
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng nhập</button>
-                  <p class="small mt-2 pt-1 mb-3 ">Bạn chưa có tài khoản? <a href="/register"
-                      class="link-danger h6 px-2">Đăng kí ngay</a>
-                  </p>
-                </div>
-
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+      role="alert" id="my-alert">
+      <div class="d-flex align-items-center text-center">
+        <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
+        <span id="error-message" class="fs-5 text-dark"></span>
+      </div>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert"></i>
     </div>
+
+    <div class="row container-fluid d-flex justify-content-center align-items-center col-lg-12 col-xl-12 mt-2">
+      <div class="d-flex col-md-12 col-lg-6 col-xl-6 order-1 order-lg-1 justify-content-end align-items-end">
+        <div class="d-flex flex-column col-md-12 col-lg-9 col-xl-9 ">
+          <a class="navbar-brand" href="#">
+            <img src="/images/logo.png" alt="Bootstrap" class="img-fluid" style="width: 150px;height: auto">
+          </a>
+          <p class="h4 fw-semibold mt-2 text-title-form">Chào mừng quay trở lại</p>
+          <p class="fs-6 fw-normal mt-2 mb-4 text-wrap text-dark">Hãy đăng nhập để sử dụng những dịch vụ cần thiết.
+          </p>
+          <form method="POST" enctype="multipart/form-data" id="loginForm">
+            <div class="form-outline mb-3">
+              <label for="email" class="form-label fw-semibold">Email</label>
+              <div class="input-group" id="input-email">
+                <span class="input-group-text bg-white border border-0"> <i class="fas fa-envelope"
+                    id="ic-email"></i></span>
+                <input type="email" id="email" name="email" class="form-control form-control-lg"
+                  placeholder="Nhập email" />
+              </div>
+            </div>
+
+            <div class="form-outline mb-3">
+              <label for="password" class="form-label fw-semibold">Password</label>
+              <div class="input-group align-items-center" id="input-password">
+                <span class="input-group-text bg-white border border-0"> <i class="fas fa-lock"
+                    id="ic-password"></i></span>
+                <input type="password" id="password" name="password" class="form-control form-control-lg"
+                  placeholder="Nhập password" />
+                <i class="fa-regular fa-eye-slash input-group-text  bg-white border border-0" id="togglePassword"></i>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="text-body px-2">Quên mật khẩu ?</a>
+            </div>
+            <div class="text-lg-start mt-3">
+              <button type="submit" class="col btn btn-primary form-control shadow-sm btn-lg" id="btn-login">Đăng
+                nhập</button>
+              <p class="small mt-4 mb-3 text-dark">Bạn chưa có tài khoản? <a href="/register"
+                  class="link-primary h6 px-2 fw-semibold">Đăng kí ngay</a>
+              </p>
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <div
+        class="col-md-12 col-lg-6 col-xl-6 d-flex flex-column justify-content-center justify-content-md-center order-2 order-lg-2">
+        <div class="slideshow-container col-md-12 col-lg-11 col-xl-11">
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_login.png" class="img-fluid" alt="Sample image">
+          </div>
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_shop_2.png" class="img-fluid" alt="Sample image">
+          </div>
+          <div class="mySlides fade-slide">
+            <img src="/images/ic_shop_3.png" class="img-fluid" alt="Sample image">
+          </div>
+
+        </div>
+        <br>
+
+        <div style="text-align:center">
+          <span class="dot" onclick="currentSlide(1)"></span>
+          <span class="dot" onclick="currentSlide(2)"></span>
+          <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+      </div>
+    </div>
+    <div id="loading-overlay">
+      <div class="boxes">
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="box">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
+
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+  <script src="/Js/loginForm.js"></script>
+  <script src="/Js/autoSlide.js"></script>
 </body>
 
 </html>

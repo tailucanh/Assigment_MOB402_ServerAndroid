@@ -1,16 +1,22 @@
-
 #sidebar {
+  position: relative;
   display: none;
-}
-#register-content {
-  width: 100%;
-}
-
-#login-content {
-  width: 100%;
+  max-width: 0;
+  max-height: 0;
+  z-index: -1;
 }
 
-#welcome-content {
+#content {
   width: 100%;
-
+}
+#navbar_main {
+  max-height: 0;
+  margin-top: -1em;
+  visibility: hidden;
+  z-index: -1;
+}
+#sidebarCollapse {
+  visibility: hidden;
+  display: none;
+  z-index: -1;
 }

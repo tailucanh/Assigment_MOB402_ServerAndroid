@@ -6,83 +6,235 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
+
+  <link rel="icon" href="/images/logo_title.png" type="image/icon type">
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
   <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/mainStyle.css">
   <link rel="stylesheet" href="/css/fonts.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+    integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
     crossorigin="anonymous"></script>
+
+  <script defer
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+  <script defer src="/Js/main.js"></script>
+
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-lg-2 px-sm-2 px-0 bg-dark-subtle shadow-lg" id="sidebar">
-        <div
-          class="d-flex flex-column justify-content-between align-items-center align-items-sm-center pt-2 min-vh-100">
-          <div class="mb-md-0 me-md-auto m-auto">
-            <a href="#">
-              <img src='/images/logo.png' width="70" alt="Logo" />
+  <div class="wrapper container-fluid">
+    {{#if isUser.isAdmin}}
+    <nav id="sidebar" style="background-image: url(/images/bg_1.jpg);">
+      <div class="sidebar-header">
+        <a class="navbar-brand" href="/home">
+          <img src="/images/logo_sidebar.png" alt="Bootstrap" class="img-fluid mt-2 ms-2 mb-3"
+            style="width: 150px;object-fit:cover">
+        </a>
+        <ul class="list-unstyled components">
+          <li class="active">
+            <a href="/home" class="nav-link align-middle px-0 ps-3" id="url-home">
+              <i class="fa-solid fa-house-chimney me-3"></i></i>Trang
+              chủ
             </a>
+          </li>
+          <li>
+            <a href="/products" class="nav-link ps-3 px-0 align-middle" id="url-product">
+              <i class="fa-solid fa-shirt me-3"></i>Sản phẩm
+            </a>
+          </li>
+          <li>
+            <a href="/users" class="nav-link px-0 align-middle ps-3" id="url-users">
+              <i class="fa-solid fa-users me-3"></i>Người dùng</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-footer">
+        <div class="dropup-center dropup mt-5 ms-4 me-4">
 
+          <div class="d-flex justify-content-around align-items-center rounded-pill pt-2 pb-2 user-box" type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{#if isUser.avatar.contentType}}
+            <img src="data:{{isUser.avatar.contentType}};base64,{{isUser.avatar.data}}" alt="Avatar"
+              class="img-fluid rounded-circle" style="width: 35px;height: 35px; object-fit:cover">
+            {{else}}
+            <img src="/images/ic_avatar.png" alt="avatar" class="img-fluid border border-dark rounded-circle"
+              style="width: 35px;height: 35px; object-fit:cover">
+            {{/if}}
 
+            <span class="fs-6 text-body fw-semibold text-wrap">{{isUser.name}}</span>
+            <i class="fa-solid fa-sort-up mt-2 text-body"></i>
           </div>
-
-          <ul class="nav nav-sidebar nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-            id="menu">
-            <li class="nav-item">
-              <a href="/admin" class="nav-link align-middle px-0">
-                <i class="fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline text-black">Trang chủ</span>
-              </a>
+          <ul class="dropdown-menu bg-primary" style="--bs-bg-opacity: .2;">
+            <li class="btn pt-3 dr text-white dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal"><i
+                class="fa-solid fa-id-badge pe-2"></i> Trang cá nhân
             </li>
-
-            <li>
-              <a href="/products" class="nav-link px-0 align-middle">
-                <i class="fa-solid fa-shirt"></i></i> <span class="ms-1 d-none d-sm-inline text-black">Sản
-                  phẩm</span></a>
-            </li>
-
-            <li>
-              <a href="/users" class="nav-link px-0 align-middle">
-                <i class="fa-solid fa-users"></i></i> <span class="ms-1 d-none d-sm-inline text-black">Người dùng</span>
-              </a>
+            <li class="btn pt-2 text-white dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal"><i
+                class="fa-solid fa-right-from-bracket pe-2"></i>Đăng xuất
             </li>
 
           </ul>
-
-          <div class="dropdown pb-4">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-              id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="/images/logo.png" width="35" height="35" class="rounded-circle me-3">
-              <span class="d-none d-sm-inline text-black">Tài khoản</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu text-small ">
-              <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-              <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-            </ul>
-          </div>
         </div>
       </div>
-      <div class="col py-3 px-4">
-        {{{body}}}
+
+    </nav>
+    <button type="button" id="sidebarCollapse" class="btn btn-primary shadow">
+      <i class="fas fa-align-left text-white"></i>
+    </button>
+
+
+    {{/if}}
+    <div id="content" class="container-fluid">
+      <div id="body">{{{body}}}</div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center">
+            <img src="/images/information.gif" alt="logout" class="img-fluid" width="55">
+            <div>
+              <p class="fs-4 fw-semibold text-wrap">Trang cá nhân</p>
+              <span class="fst-italic text-wrap">(* Chỉnh sửa thông tin của bạn khi cần thiết.)</sp>
+            </div>
+
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" enctype="multipart/form-data" id="editProfileForm">
+          <div class="modal-body">
+            <div class="container-fluid align-items-center">
+              <div class="row mb-2 align-items-center">
+                <div class="d-flex flex-column align-items-center mb-1">
+                  {{#if isUser.avatar.contentType}}
+                  <img src="data:{{isUser.avatar.contentType}};base64,{{isUser.avatar.data}}"
+                    class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
+                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover">
+                  {{else}}
+                  <img src="/images/ic_avatar.png"
+                    class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
+                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover" />
+                  {{/if}}
+                  <label for="upload-edit-photo">
+                    <a href="#" class="text-decoration-none ">
+                      <p class="text-center fst-italic fw-semibold">Cập nhật ảnh</p>
+                    </a>
+                  </label>
+                  <input class="form-control form-control-sm" id="edit_avatar" type="file" name="edit_avatar"
+                    accept="image/*" style="display: none;">
+                </div>
+              </div>
+              <div class="row mb-2 align-items-center">
+                <div class="col-lg-4 col-md-12 col-xs-12">
+                  <label for="name" class="col-form-label">Tên:</label>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                  <input type="text" class="form-control" id="edit-name" name="name" value="{{isUser.name}}" required>
+                </div>
+              </div>
+              <div class="row mb-2 align-items-center">
+                <div class="col-lg-4 col-md-12 col-xs-12">
+                  <label for="email" class="col-form-label">Email:</label>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                  <input type="email" class="form-control" id="edit-email" name="email" value="{{isUser.email}}"
+                    required>
+                </div>
+              </div>
+              <div class="row mb-2 align-items-center">
+                <div class="col-lg-4 col-md-12 col-xs-12">
+                  <label for="password" class="col-form-label">Mật khẩu cũ:</label>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                  <input type="password" class="form-control" id="edit-old-password" name="old-password" minlength="6"
+                    maxlength="20" required>
+                </div>
+              </div>
+              <div class="row mb-2 align-items-center">
+                <div class="col-lg-4 col-md-12 col-xs-12">
+                  <label for="password" class="col-form-label">Mật khẩu mới:</label>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                  <input type="password" class="form-control" id="edit-new-password" name="password" minlength="6"
+                    maxlength="20" required>
+                </div>
+              </div>
+
+              <input type="hidden" id="userId" value="{{isUser.id}}" name="id">
+              <input type="hidden" id="oldPassword" value="{{isUser.password}}" name="password">
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-info ps-5 pe-5">Cập nhật</button>
+          </div>
+        </form>
+
       </div>
     </div>
   </div>
 
-  <script>
-    $(document).ready(function () {
-      $('.nav-link').on('click', function () {
-        $('.nav-link').removeClass('active');
-        $(this).addClass('active');
-      });
-    });
-  </script>
+
+
+
+  <div class=" modal fade" id="logoutModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header d-flex align-items-start">
+          <div class="d-flex align-items-center justify-content-center">
+            <img src="/images/logout.gif" alt="logout" class="img-fluid w-25 ms-4">
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body fs-5">
+          Bạn có chắc chắn muốn đăng xuất tài khoản?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <a id="logout-link" href="#" class="btn btn-danger  shadow-sm  fs-6">Đăng xuất ngay </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  {{#if alertErr}}
+  <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top"
+    role="alert">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
+      <span class="fs-5 text-dark">{{alertErr}}</span>
+    </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+  </div>
+  {{/if}}
+
+  {{#if alertSuccess}}
+  <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top"
+    role="alert">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
+      <span class="fs-5 text-dark">{{alertSuccess}}</span>
+    </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+  </div>
+  {{/if}}
 
 </body>
 
