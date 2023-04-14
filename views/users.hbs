@@ -8,9 +8,11 @@
   <title>Danh sách người dùng</title>
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
-  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/css/userStyle.css">
   <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/loadingStyle.css">
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -79,8 +81,9 @@
                     <label for="name" class="col-form-label">Chức vụ:</label>
                   </div>
                   <div class="col-lg-8 col-md-12 col-xs-12">
-                    <select class="form-select" aria-label="Default select example" name="select-permission">
-                      <option value="admin" selected>Quản trị viên</option>
+                    <select class="form-select" aria-label="Default select example" name="select-permission"
+                      id="select-permission">
+                      <option value=" admin" selected>Quản trị viên</option>
                       <option value="user">Người dùng</option>
                     </select>
                   </div>
@@ -316,38 +319,73 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <a id="delete-link" href="#" class="btn btn-danger  shadow-sm  fs-6">Xóa ngay</a>
+            <button type="button" id="delete-button" class="btn btn-danger  shadow-sm  fs-6">Xóa ngay</button>
           </div>
         </div>
       </div>
     </div>
 
-    {{#if alertErr}}
-    <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top"
-      role="alert">
+    <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+      role="alert" id="my-alert-error">
       <div class="d-flex align-items-center text-center">
         <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
-        <span class="fs-5 text-dark">{{alertErr}}</span>
+        <span id="error-message" class="fs-5 text-dark"></span>
       </div>
-      <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-error"></i>
     </div>
-    {{/if}}
 
-    {{#if alertSuccess }}
-    <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top"
-      role="alert">
+
+    <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+      role="alert" id="my-alert-success">
       <div class="d-flex align-items-center text-center">
-        <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
-        <span class="fs-5 text-dark">{{alertSuccess}}</span>
+        <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
+        <span id="success-message" class="fs-5 text-dark"></span>
       </div>
-      <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-success"></i>
     </div>
-    {{/if}}
 
   </div>
-  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+  <div id="loading-overlay">
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+  </div>
+
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="/Js/users.js"></script>
+
+
+
+
+
 </body>
 
 </html>

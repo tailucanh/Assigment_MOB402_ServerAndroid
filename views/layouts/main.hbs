@@ -6,26 +6,25 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
-
   <link rel="icon" href="/images/logo_title.png" type="image/icon type">
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
-  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/css/mainStyle.css">
   <link rel="stylesheet" href="/css/fonts.css">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="/css/loadingStyle.css">
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-
+  <script defer
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
     integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
     crossorigin="anonymous"></script>
 
-  <script defer
-    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-  <script defer src="/Js/main.js"></script>
+
+
 
 </head>
 
@@ -59,7 +58,6 @@
       </div>
       <div class="sidebar-footer">
         <div class="dropup-center dropup mt-5 ms-4 me-4">
-
           <div class="d-flex justify-content-around align-items-center rounded-pill pt-2 pb-2 user-box" type="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             {{#if isUser.avatar.contentType}}
@@ -120,19 +118,21 @@
                   {{#if isUser.avatar.contentType}}
                   <img src="data:{{isUser.avatar.contentType}};base64,{{isUser.avatar.data}}"
                     class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover">
+                    alt="view_profile_avatar" id="view_profile_avatar"
+                    style="width: 100px; height:100px; object-fit:cover">
                   {{else}}
                   <img src="/images/ic_avatar.png"
                     class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover" />
+                    alt="view_profile_avatar" id="view_profile_avatar"
+                    style="width: 100px; height:100px; object-fit:cover" />
                   {{/if}}
-                  <label for="upload-edit-photo">
+                  <label for="upload-profile-avatar">
                     <a href="#" class="text-decoration-none ">
                       <p class="text-center fst-italic fw-semibold">Cập nhật ảnh</p>
                     </a>
                   </label>
-                  <input class="form-control form-control-sm" id="edit_avatar" type="file" name="edit_avatar"
-                    accept="image/*" style="display: none;">
+                  <input class="form-control form-control-sm" id="edit_profile_avatar" type="file"
+                    name="edit_profile_avatar" accept="image/*" style="display: none;">
                 </div>
               </div>
               <div class="row mb-2 align-items-center">
@@ -158,7 +158,7 @@
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12">
                   <input type="password" class="form-control" id="edit-old-password" name="old-password" minlength="6"
-                    maxlength="20" required>
+                    maxlength="20">
                 </div>
               </div>
               <div class="row mb-2 align-items-center">
@@ -167,7 +167,7 @@
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12">
                   <input type="password" class="form-control" id="edit-new-password" name="password" minlength="6"
-                    maxlength="20" required>
+                    maxlength="20">
                 </div>
               </div>
 
@@ -177,7 +177,7 @@
 
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
             <button type="submit" class="btn btn-info ps-5 pe-5">Cập nhật</button>
           </div>
         </form>
@@ -185,8 +185,6 @@
       </div>
     </div>
   </div>
-
-
 
 
   <div class=" modal fade" id="logoutModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -211,30 +209,8 @@
 
 
 
-
-
-
-  {{#if alertErr}}
-  <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top"
-    role="alert">
-    <div class="d-flex align-items-center text-center">
-      <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
-      <span class="fs-5 text-dark">{{alertErr}}</span>
-    </div>
-    <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
-  </div>
-  {{/if}}
-
-  {{#if alertSuccess}}
-  <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top"
-    role="alert">
-    <div class="d-flex align-items-center text-center">
-      <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
-      <span class="fs-5 text-dark">{{alertSuccess}}</span>
-    </div>
-    <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
-  </div>
-  {{/if}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="/Js/main.js"></script>
 
 </body>
 

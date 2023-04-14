@@ -16,7 +16,7 @@
   min-height: 50px;
   max-height: 200px;
   margin-bottom: 5px;
-  z-index: 999;
+  z-index: 8888;
   overflow: hidden;
   animation: slideInDown 0.2s;
 }

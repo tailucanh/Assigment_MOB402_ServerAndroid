@@ -11,10 +11,13 @@
   <link rel="stylesheet" href="/css/productStyle.css">
   <link rel="stylesheet" href="/css/fonts.css">
 
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
-  <div class="container-fluid product-container">
+  <div class="container-fluid pt-4  product-container">
     <div class="d-flex justify-content-between align-items-start mt-lg-2 ms-lg-2 me-lg-2">
       <p class="fs-3 fw-semibold"><i class="fa-solid fa-caret-right me-2"></i>Sản phẩm</p>
       <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#modalAdd"><i
@@ -94,15 +97,30 @@
       </div>
     </div>
 
+    <div class="search-box mb-4 mt-3">
+      <form method="GET" action="/products/search" id="searchForm">
+        <div class="container-fluid row">
+          <div class="col-lg-10 col-md-9 col-sm-12">
+            <input type="text" name="searchTerm" id="searchTerm" class="input-search"
+              placeholder="Tìm kiếm sản phẩm(tên sản phẩm...)">
+          </div>
+          <div class="col-lg-2 col-md-3 col-sx-12 d-flex justify-content-center">
+            <button type="submit" class="btn button-search" id="btn-search"> <i
+                class="fa-solid fa-magnifying-glass me-2"></i>Tìm
+              kiếm</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="row mt-2 ms-lg-2 me-lg-2">
-
       {{#if arrProduct}}
       <div class="price-box mb-1 ms-2">
         <span class="fw-semibold text-body" style="--bs-text-opacity: .5;">Tổng số: <span
             class="fw-semibold fs-5 text-body" style="--bs-text-opacity: 1;">{{totalProducts}}</span></span>
       </div>
+
       <div class="table-responsive table-container">
-        <table class="table table-hover table-borderless">
+        <table class="table table-hover table-borderless" id="product-table">
           <thead>
             <tr>
               <th>STT</th>
@@ -322,12 +340,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <a id="delete-link" href="#" class="btn btn-danger  shadow-sm  fs-6">Xóa ngay</a>
+            <button type="button" id="delete-button" class="btn btn-danger  shadow-sm  fs-6">Xóa ngay</button>
           </div>
         </div>
       </div>
     </div>
-
 
     <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
       role="alert" id="my-alert-error">
@@ -335,7 +352,7 @@
         <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
         <span id="error-message" class="fs-5 text-dark"></span>
       </div>
-      <i class="fa-solid fa-xmark fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-error"></i>
     </div>
 
 
@@ -343,16 +360,52 @@
       role="alert" id="my-alert-success">
       <div class="d-flex align-items-center text-center">
         <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
-        <span id="error-success" class="fs-5 text-dark"></span>
+        <span id="success-message" class="fs-5 text-dark"></span>
       </div>
-      <i class="fa-regular fa-circle-check fs-2 pe-2" data-bs-dismiss="alert" aria-label="Close"></i>
+      <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-success"></i>
     </div>
 
+  </div>
+
+
+
+
+  <div id="loading-overlay">
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
 
   </div>
-  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="/Js/products.js"></script>
+
+
 </body>
 
 </html>

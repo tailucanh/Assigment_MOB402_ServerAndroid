@@ -77,120 +77,63 @@ router.get("/", middleware, async (req, res) => {
 });
 
 router.post(
-  "/add_item",
+  "/add_product",
   middleware,
   upload.single("img_product"),
   async function (req, res) {
     const { name, price, type, desc } = req.body;
-    if (req.file && req.file.buffer) {
-      const fileData = req.file.buffer;
-      const product = new ProductModel({
-        image: { data: fileData, contentType: req.file.mimetype },
-        name: name,
-        price: price,
-        type: type,
-        desc: desc,
-      });
-      if (name || price || type) {
-        try {
-          await product.save();
-          res.status(200).json({
-            success: true,
-            message: "Thêm sản phẩm thành công.",
-          });
-        } catch (err) {
-          res.status(500).json({
-            success: false,
-            message: "Đã có lỗi xảy ra. Hãy thử lại.",
-          });
-        }
-      }
-    } else {
-      const product = new ProductModel({
-        image: { data: "", contentType: "" },
-        name: name,
-        price: price,
-        type: type,
-        desc: desc,
-      });
-      if (name || price || type) {
-        try {
-          await product.save();
-          res.status(200).json({
-            success: true,
-            message: "Thêm sản phẩm thành công.",
-          });
-        } catch (err) {
-          res.status(500).json({
-            success: false,
-            message: "Đã có lỗi xảy ra. Hãy thử lại.",
-          });
-        }
-      }
-    }
-  }
-);
 
-router.get("/delete/:id", middleware, async (req, res) => {
-  const productId = req.params.id;
-  try {
-    const deletedProduct = await ProductModel.findByIdAndDelete(productId);
-    if (!deletedProduct) {
-      res.status(200).json({
+    if (!name) {
+      res.status(400).json({
         success: false,
-        message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+        message: "Vui lòng nhập tên sản phẩm.",
       });
-    }
-    res.status(200).json({
-      success: true,
-      message: "Xóa sản phẩm thành công.",
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Đã có lỗi xảy ra. Hãy thử lại.",
-    });
-  }
-});
-
-router.post(
-  "/update/:id",
-  upload.single("img_product"),
-  middleware,
-  async (req, res) => {
-    const productId = req.params.id;
-    console.log(productId);
-    const { name, price, type, desc } = req.body;
-    let updatedData = {};
-    updatedData.name = name;
-    updatedData.price = price;
-    updatedData.type = type;
-    updatedData.desc = desc;
-    if (req.file && req.file.buffer) {
-      updatedData.image = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      };
-    }
-    if (name || price || type) {
+    } else if (!price) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập giá sản phẩm.",
+      });
+    } else if (Number(price) < 0) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập giá lớn hơn 0đ.",
+      });
+    } else if (!type) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập loại sản phẩm.",
+      });
+    } else {
       try {
-        const updateProduct = await ProductModel.findByIdAndUpdate(
-          productId,
-          updatedData,
-          {
-            new: true,
-          }
-        );
-        if (!updateProduct) {
-          res.status(500).json({
-            success: false,
-            message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+        if (req.file && req.file.buffer) {
+          const fileData = req.file.buffer;
+          const product = new ProductModel({
+            image: { data: fileData, contentType: req.file.mimetype },
+            name: name,
+            price: price,
+            type: type,
+            desc: desc,
+          });
+
+          await product.save();
+          res.status(200).json({
+            success: true,
+            message: "Thêm sản phẩm thành công.",
+          });
+        } else {
+          const product = new ProductModel({
+            image: { data: "", contentType: "" },
+            name: name,
+            price: price,
+            type: type,
+            desc: desc,
+          });
+          await product.save();
+          res.status(201).json({
+            success: true,
+            message: "Thêm sản phẩm thành công.",
           });
         }
-        res.status(500).json({
-          success: true,
-          message: "Cập nhật sản phẩm thành công.",
-        });
       } catch (err) {
         res.status(500).json({
           success: false,
@@ -200,5 +143,109 @@ router.post(
     }
   }
 );
+
+router.delete("/delete_product/:id", middleware, async (req, res) => {
+  const productId = req.params.id;
+  console.log(productId);
+  if (productId.length > 0) {
+    try {
+      await ProductModel.findByIdAndDelete(productId);
+      res.status(201).json({
+        success: true,
+        message: "Xóa sản phẩm thành công.",
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: "Đã có lỗi xảy ra. Hãy thử lại.",
+      });
+    }
+  } else {
+    res.status(500).json({
+      success: false,
+      message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+    });
+  }
+});
+
+router.put(
+  "/update_product/:id",
+  middleware,
+  upload.single("img_product"),
+  async (req, res) => {
+    const productId = req.params.id;
+    const { name, price, type, desc } = req.body;
+
+    if (!name) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập tên sản phẩm.",
+      });
+    } else if (!price) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập giá sản phẩm.",
+      });
+    } else if (Number(price) < 0) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập giá lớn hơn 0đ.",
+      });
+    } else if (!type) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập loại sản phẩm.",
+      });
+    } else {
+      if (productId.length > 0) {
+        let updatedData = {};
+        updatedData.name = name;
+        updatedData.price = price;
+        updatedData.type = type;
+        updatedData.desc = desc;
+        if (req.file && req.file.buffer) {
+          updatedData.image = {
+            data: req.file.buffer,
+            contentType: req.file.mimetype,
+          };
+        }
+        try {
+          await ProductModel.findByIdAndUpdate(productId, updatedData, {
+            new: true,
+          });
+
+          res.status(201).json({
+            success: true,
+            message: "Cập nhật sản phẩm thành công.",
+          });
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Đã có lỗi xảy ra. Hãy thử lại.",
+          });
+        }
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "Không tìm thấy sản phẩm. Hãy thử lại.",
+        });
+      }
+    }
+  }
+);
+
+router.get("/search", async (req, res) => {
+  const searchTerm = req.query.searchTerm;
+  console.log(searchTerm);
+  const regex = new RegExp(searchTerm.toString().trim(), "i");
+  try {
+    const arrProduct = await ProductModel.find({ name: regex }).lean();
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Đã có lỗi xảy ra.Hãy thử lại",
+    });
+  }
+});
 
 module.exports = router;

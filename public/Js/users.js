@@ -43,13 +43,69 @@ $(document).ready(function () {
     $("#btn-delete").show();
   }
 
-  $("#modalAdd button.btn-primary").click(function () {
+  const alertError = $("#my-alert-error");
+  const errorMessage = $("#error-message");
+  const closeAlertError = $("#close-alert-error");
+
+  closeAlertError.on("click", () => {
+    alertError.addClass("d-none");
+  });
+
+  const alertSuccess = $("#my-alert-success");
+  const successMessage = $("#success-message");
+  const closeAlertSuccess = $("#close-alert-success");
+
+  closeAlertSuccess.on("click", () => {
+    alertSuccess.addClass("d-none");
+  });
+
+  function isAlertError(message) {
+    errorMessage.text(message);
+    alertError.removeClass("d-none");
+    setTimeout(() => {
+      alertError.addClass("d-none");
+    }, 3000);
+  }
+  function isAlertSuccess(message) {
+    successMessage.text(message);
+    alertSuccess.removeClass("d-none");
+    setTimeout(() => {
+      alertSuccess.addClass("d-none");
+    }, 3000);
+  }
+
+  $("#add-user-form").submit(function (event) {
+    event.preventDefault();
+    var name = $("input[name='name']").val();
+    var avatar = $("#avatar")[0].files[0];
+    var email = $("input[name='email']").val();
+    var password = $("input[name='password']").val();
+    var permission = $("#select-permission").val();
+
+    var formData = new FormData();
+    formData.append("name", name);
+    formData.append("avatar", avatar);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("permission", permission);
+
+    $("#loading-overlay").show();
     $.ajax({
+      url: "/users/add_user",
       type: "POST",
-      url: "/",
-      data: $("#add-user-form").serialize(),
-      success: function () {
-        location.reload();
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response, status, xhr) {
+        if (response.success) {
+          $("#loading-overlay").hide();
+          isAlertSuccess(response.message);
+          location.reload();
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#loading-overlay").hide();
+        isAlertError(jqXHR.responseJSON.message);
       },
     });
   });
@@ -61,8 +117,27 @@ $(document).ready(function () {
     var modal = $(this);
     modal.find("#userName").text(username);
 
-    var deleteLink = "/users/delete/" + userId;
-    $("#delete-link").attr("href", deleteLink);
+    $("#delete-button").click(function (event) {
+      event.preventDefault();
+      $("#loading-overlay").show();
+      $.ajax({
+        url: "/users/delete_user/" + userId,
+        type: "DELETE",
+        processData: false,
+        contentType: false,
+        success: function (response, status, xhr) {
+          if (response.success) {
+            $("#loading-overlay").hide();
+            isAlertSuccess(response.message);
+            location.reload();
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#loading-overlay").hide();
+          isAlertError(jqXHR.responseJSON.message);
+        },
+      });
+    });
   });
 
   $("#infoModal").on("show.bs.modal", function (event) {
@@ -127,21 +202,24 @@ $(document).ready(function () {
     formData.append("email", userEmail);
     formData.append("selectedValue", userPermission);
 
+    $("#loading-overlay").show();
     $.ajax({
-      type: "POST",
-      url: "/users/update/" + userId,
+      type: "PUT",
+      url: "/users/update_user/" + userId,
       data: formData,
       processData: false,
       contentType: false,
-      success: function (result) {
-        location.reload();
+      success: function (response, status, xhr) {
+        if (response.success) {
+          $("#loading-overlay").hide();
+          isAlertSuccess(response.message);
+          location.reload();
+        }
       },
-      error: function (err) {
-        console.error(err);
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#loading-overlay").hide();
+        isAlertError(jqXHR.responseJSON.message);
       },
     });
-
-    $("#editModal").modal("hide");
-    event.stopPropagation();
   });
 });

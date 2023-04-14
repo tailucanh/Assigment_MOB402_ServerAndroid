@@ -8,13 +8,16 @@
   <title>Trang chủ</title>
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
-  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/homeStyle.css">
+  <link rel="stylesheet" href="/css/loadingStyle.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
     integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
     crossorigin="anonymous"></script>
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </head>
 
@@ -142,18 +145,18 @@
         <div class="pagination-container d-flex justify-content-center">
           <ul class="pagination nav-shadow">
             {{#if prevPage}}
-            <li class="page-item"> <a class="page-link" href="/home?page={{prevPage}}">&laquo; Previous</a></li>
+            <li class="page-item"> <a class="page-link" href="/homeUser?page={{prevPage}}">&laquo; Previous</a></li>
             {{/if}}
             {{#each pages}}
             {{#if this.isCurrent}}
             <li class="page-item"><span a class="page-link active" aria-current="page">{{this.pageNum}}</span></li>
             {{else}}
-            <li class="page-item"><a class="page-link" href="/home?page={{this.pageNum}}">{{this.pageNum}}</a></li>
+            <li class="page-item"><a class="page-link" href="/homeUser?page={{this.pageNum}}">{{this.pageNum}}</a></li>
             {{/if}}
             {{/each}}
 
             {{#if nextPage}}
-            <li class="page-item"> <a class="page-link" href="/home?page={{nextPage}}">Next &raquo;</a></li>
+            <li class="page-item"> <a class="page-link" href="/homeUser?page={{nextPage}}">Next &raquo;</a></li>
             {{/if}}
           </ul>
         </div>
@@ -249,19 +252,21 @@
                   {{#if isUser.avatar.contentType}}
                   <img src="data:{{isUser.avatar.contentType}};base64,{{isUser.avatar.data}}"
                     class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover">
+                    alt="view_profile_avatar" id="view_profile_avatar"
+                    style="width: 100px; height:100px; object-fit:cover">
                   {{else}}
                   <img src="/images/ic_avatar.png"
                     class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover" />
+                    alt="view_profile_avatar" id="view_profile_avatar"
+                    style="width: 100px; height:100px; object-fit:cover" />
                   {{/if}}
-                  <label for="upload-edit-photo">
+                  <label for="upload-profile-avatar">
                     <a href="#" class="text-decoration-none ">
                       <p class="text-center fst-italic fw-semibold">Cập nhật ảnh</p>
                     </a>
                   </label>
-                  <input class="form-control form-control-sm" id="edit_avatar" type="file" name="edit_avatar"
-                    accept="image/*" style="display: none;">
+                  <input class="form-control form-control-sm" id="edit_profile_avatar" type="file"
+                    name="edit_profile_avatar" accept="image/*" style="display: none;">
                 </div>
               </div>
               <div class="row mb-2 align-items-center">
@@ -287,7 +292,7 @@
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12">
                   <input type="password" class="form-control" id="edit-old-password" name="old-password" minlength="6"
-                    maxlength="20" required>
+                    maxlength="20">
                 </div>
               </div>
               <div class="row mb-2 align-items-center">
@@ -296,7 +301,7 @@
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12">
                   <input type="password" class="form-control" id="edit-new-password" name="password" minlength="6"
-                    maxlength="20" required>
+                    maxlength="20">
                 </div>
               </div>
 
@@ -306,8 +311,8 @@
 
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="submit" class="btn btn-info ps-5 pe-5">Cập nhật</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-info ps-5 pe-5" id="btn-submit">Cập nhật</button>
           </div>
         </form>
 
@@ -337,9 +342,61 @@
     </div>
   </div>
 
-  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+    role="alert" id="my-alert-error">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
+      <span id="error-message" class="fs-5 text-dark"></span>
+    </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-error"></i>
+  </div>
+
+
+  <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+    role="alert" id="my-alert-success">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
+      <span id="success-message" class="fs-5 text-dark"></span>
+    </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-success"></i>
+  </div>
+
+
+
+  <div id="loading-overlay">
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+  </div>
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="/Js/homeUser.js"></script>
+  <script src="/Js/profile.js"></script>
 </body>
 
 </html>

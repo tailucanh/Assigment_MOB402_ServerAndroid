@@ -8,14 +8,12 @@
   <title>Trang chủ</title>
   <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/library/fontawesome/css/all.min.css">
-  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/homeStyle.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-    integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-    crossorigin="anonymous"></script>
 
+  <script src="/library/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 
 <body>
@@ -81,7 +79,6 @@
 
       </div>
     </div>
-
 
 
     <div class="row ms-lg-2 me-lg-2 mt-lg-4">
@@ -202,122 +199,61 @@
       </div>
     </div>
   </div>
-
-  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="d-flex align-items-center">
-            <img src="/images/information.gif" alt="logout" class="img-fluid" width="55">
-            <div>
-              <p class="fs-4 fw-semibold text-wrap">Trang cá nhân</p>
-              <span class="fst-italic text-wrap">(* Chỉnh sửa thông tin của bạn khi cần thiết.)</sp>
-            </div>
-
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form method="POST" enctype="multipart/form-data" id="editProfileForm">
-          <div class="modal-body">
-            <div class="container-fluid align-items-center">
-              <div class="row mb-2 align-items-center">
-                <div class="d-flex flex-column align-items-center mb-1">
-                  {{#if isUser.avatar.contentType}}
-                  <img src="data:{{isUser.avatar.contentType}};base64,{{isUser.avatar.data}}"
-                    class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover">
-                  {{else}}
-                  <img src="/images/ic_avatar.png"
-                    class=" img-fluid rounded-circle shadow-sm border border-2 border-dark-subtle mb-1 "
-                    alt="view_edit_avatar" id="view_edit_avatar" style="width: 100px; height:100px; object-fit:cover" />
-                  {{/if}}
-                  <label for="upload-edit-photo">
-                    <a href="#" class="text-decoration-none ">
-                      <p class="text-center fst-italic fw-semibold">Cập nhật ảnh</p>
-                    </a>
-                  </label>
-                  <input class="form-control form-control-sm" id="edit_avatar" type="file" name="edit_avatar"
-                    accept="image/*" style="display: none;">
-                </div>
-              </div>
-              <div class="row mb-2 align-items-center">
-                <div class="col-lg-4 col-md-12 col-xs-12">
-                  <label for="name" class="col-form-label">Tên:</label>
-                </div>
-                <div class="col-lg-8 col-md-12 col-xs-12">
-                  <input type="text" class="form-control" id="edit-name" name="name" value="{{isUser.name}}" required>
-                </div>
-              </div>
-              <div class="row mb-2 align-items-center">
-                <div class="col-lg-4 col-md-12 col-xs-12">
-                  <label for="email" class="col-form-label">Email:</label>
-                </div>
-                <div class="col-lg-8 col-md-12 col-xs-12">
-                  <input type="email" class="form-control" id="edit-email" name="email" value="{{isUser.email}}"
-                    required>
-                </div>
-              </div>
-              <div class="row mb-2 align-items-center">
-                <div class="col-lg-4 col-md-12 col-xs-12">
-                  <label for="password" class="col-form-label">Mật khẩu cũ:</label>
-                </div>
-                <div class="col-lg-8 col-md-12 col-xs-12">
-                  <input type="password" class="form-control" id="edit-old-password" name="old-password" minlength="6"
-                    maxlength="20" required>
-                </div>
-              </div>
-              <div class="row mb-2 align-items-center">
-                <div class="col-lg-4 col-md-12 col-xs-12">
-                  <label for="password" class="col-form-label">Mật khẩu mới:</label>
-                </div>
-                <div class="col-lg-8 col-md-12 col-xs-12">
-                  <input type="password" class="form-control" id="edit-new-password" name="password" minlength="6"
-                    maxlength="20" required>
-                </div>
-              </div>
-
-              <input type="hidden" id="userId" value="{{isUser.id}}" name="id">
-              <input type="hidden" id="oldPassword" value="{{isUser.password}}" name="password">
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="submit" class="btn btn-info ps-5 pe-5">Cập nhật</button>
-          </div>
-        </form>
-
-      </div>
+  <div class="alert alert-danger d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+    role="alert" id="my-alert-error">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-solid fa-triangle-exclamation fs-2 pe-3 px-1"></i>
+      <span id="error-message" class="fs-5 text-dark"></span>
     </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-error"></i>
   </div>
 
 
-
-  <div class=" modal fade" id="logoutModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header d-flex align-items-start">
-          <div class="d-flex align-items-center justify-content-center">
-            <img src="/images/logout.gif" alt="logout" class="img-fluid w-25 ms-4">
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body fs-5">
-          Bạn có chắc chắn muốn đăng xuất tài khoản?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-          <a id="logout-link" href="#" class="btn btn-danger  shadow-sm  fs-6">Đăng xuất ngay </a>
-        </div>
-      </div>
+  <div class="alert alert-success d-flex justify-content-between align-items-center fade show m-auto fixed-top d-none"
+    role="alert" id="my-alert-success">
+    <div class="d-flex align-items-center text-center">
+      <i class="fa-regular fa-circle-check  fs-2 pe-3 px-1"></i>
+      <span id="success-message" class="fs-5 text-dark"></span>
     </div>
+    <i class="fa-solid fa-xmark fs-2 pe-2" id="close-alert-success"></i>
   </div>
 
 
+  <div id="loading-overlay">
+    <div class="boxes">
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
 
-  <script src="/library/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </div>
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <script src="/Js/home.js"></script>
+  <script src="/Js/profile.js"></script>
+
+
 </body>
 
 </html>

@@ -34,6 +34,37 @@ $(document).ready(function () {
     }
   });
 
+  const alertError = $("#my-alert-error");
+  const errorMessage = $("#error-message");
+  const closeAlertError = $("#close-alert-error");
+
+  closeAlertError.on("click", () => {
+    alertError.addClass("d-none");
+  });
+
+  const alertSuccess = $("#my-alert-success");
+  const successMessage = $("#success-message");
+  const closeAlertSuccess = $("#close-alert-success");
+
+  closeAlertSuccess.on("click", () => {
+    alertSuccess.addClass("d-none");
+  });
+
+  function isAlertError(message) {
+    errorMessage.text(message);
+    alertError.removeClass("d-none");
+    setTimeout(() => {
+      alertError.addClass("d-none");
+    }, 3000);
+  }
+  function isAlertSuccess(message) {
+    successMessage.text(message);
+    alertSuccess.removeClass("d-none");
+    setTimeout(() => {
+      alertSuccess.addClass("d-none");
+    }, 3000);
+  }
+
   $("#addProductForm").submit(function (e) {
     e.preventDefault();
     var productImage = $("#img_product")[0].files[0];
@@ -48,20 +79,23 @@ $(document).ready(function () {
     formData.append("price", productPrice);
     formData.append("type", productType);
     formData.append("desc", productDesc);
+    $("#loading-overlay").show();
     $.ajax({
       type: "POST",
-      url: "/products/add_item",
+      url: "/products/add_product",
       data: formData,
       processData: false,
       contentType: false,
-      success: function (response) {
+      success: function (response, status, xhr) {
         if (response.success) {
-          alert(response.message);
-          $("#modalAdd").modal("hide");
+          $("#loading-overlay").hide();
+          isAlertSuccess(response.message);
           location.reload();
-        } else {
-          alert(response.message);
         }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#loading-overlay").hide();
+        isAlertError(jqXHR.responseJSON.message);
       },
     });
   });
@@ -73,8 +107,27 @@ $(document).ready(function () {
     var modal = $(this);
     modal.find("#productName").text(productName);
 
-    var deleteLink = "/products/delete/" + productId;
-    $("#delete-link").attr("href", deleteLink);
+    $("#delete-button").click(function (event) {
+      event.preventDefault();
+      $("#loading-overlay").show();
+      $.ajax({
+        url: "/products/delete_product/" + productId,
+        type: "DELETE",
+        processData: false,
+        contentType: false,
+        success: function (response, status, xhr) {
+          if (response.success) {
+            $("#loading-overlay").hide();
+            isAlertSuccess(response.message);
+            location.reload();
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#loading-overlay").hide();
+          isAlertError(jqXHR.responseJSON.message);
+        },
+      });
+    });
   });
 
   $("#infoModal").on("show.bs.modal", function (event) {
@@ -84,7 +137,7 @@ $(document).ready(function () {
     var price = button.data("price");
     var type = button.data("type");
     var desc = button.data("desc");
-    console.log(imageData);
+
     var modal = $(this);
     desc
       ? modal.find("#info-title-desc").show()
@@ -136,19 +189,55 @@ $(document).ready(function () {
     formData.append("price", productPrice);
     formData.append("type", productType);
     formData.append("desc", productDesc);
-
+    $("#loading-overlay").show();
     $.ajax({
-      type: "POST",
-      url: "/products/update/" + productId,
+      type: "PUT",
+      url: "/products/update_product/" + productId,
       data: formData,
       processData: false,
       contentType: false,
-      success: function () {
-        $("#editModal").modal("hide");
+      success: function (response, status, xhr) {
+        if (response.success) {
+          $("#loading-overlay").hide();
+          isAlertSuccess(response.message);
+          location.reload();
+        }
       },
-      error: function (err) {
-        console.error(err);
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#loading-overlay").hide();
+        isAlertError(jqXHR.responseJSON.message);
       },
     });
   });
+
+  $("#btn-search").on("click", function (event) {
+    event.preventDefault();
+    var keyword = $("#searchTerm").val();
+    if (keyword === "") {
+      isAlertError("Hãy nhập từ khóa trước khi tìm kiếm.");
+    } else {
+      $("#searchForm").submit();
+    }
+  });
+
+  // $("#searchForm").submit(function (event) {
+  //   event.preventDefault();
+
+  //   var keyword = $("#searchTerm").val();
+  //   if (keyword === "") {
+  //     isAlertError("Hãy nhập từ khóa trước khi tìm kiếm.");
+  //   } else {
+  //     $.ajax({
+  //       url: "/products/search",
+  //       method: "GET",
+  //       data: { keyword: keyword },
+  //       success: function (response) {
+  //         isAlertSuccess("Thành công");
+  //       },
+  //       error: function (xhr) {
+  //         isAlertError("Thất bại");
+  //       },
+  //     });
+  //   }
+  // });
 });

@@ -8,6 +8,7 @@ const middleware = require("../helpers/middleware");
 const UserModal = require("../models/User");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 router.use(cookieParser());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -81,7 +82,7 @@ router.get("/", middleware, async (req, res) => {
 });
 
 router.post(
-  "/",
+  "/add_user",
   middleware,
   upload.single("avatar"),
   async function (req, res) {
@@ -93,104 +94,118 @@ router.post(
     } else if (selectedOption == "user") {
       permission = false;
     }
+    console.log(req.body);
 
-    if (req.file) {
-      if (name || email || password) {
-        const checkUser = await UserModal.findOne({ email });
-        if (checkUser) {
-          res.redirect(
-            "/users?alertErr=" +
-              encodeURIComponent("Email đã được đăng kí. Hãy chọn email khác.")
-          );
-        } else {
-          const fileData = req.file.buffer;
-          const salt = await bcrypt.genSalt(15);
-          const bcryptPassWord = await bcrypt.hash(password, salt);
-          const newUser = new UserModal({
-            avatar: { data: fileData, contentType: req.file.mimetype },
-            name: name,
-            email: email,
-            password: bcryptPassWord,
-            userAuthorization: permission,
-          });
-          const token = await newUser.generateAuthToken();
-          newUser.token = token;
-          try {
-            await newUser.save();
-            res.redirect(
-              "/users?alertSuccess=" +
-                encodeURIComponent("Thêm người dùng thành công.")
-            );
-          } catch (err) {
-            res.redirect(
-              "/users?alertErr=" +
-                encodeURIComponent("Đã có lỗi xảy ra. Hãy thử lại.")
-            );
-          }
-        }
-      }
+    if (!name) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập tên.",
+      });
+    } else if (!email) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email.",
+      });
+    } else if (!regex.test(email)) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email đúng định dạng.",
+      });
+    } else if (!password) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập mật khẩu.",
+      });
+    } else if (password.length < 6) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập mật khẩu nhiều hơn 6 kí tự.",
+      });
     } else {
-      if (name || email || password) {
-        const checkUser = await UserModal.findOne({ email });
-        if (checkUser) {
-          res.redirect(
-            "/users?alertErr=Email đã được đăng kí. Hãy chọn email khác."
-          );
-        } else {
-          const salt = await bcrypt.genSalt(15);
-          const bcryptPassWord = await bcrypt.hash(password, salt);
-          const newUser = new UserModal({
-            avatar: { data: "", contentType: "" },
-            name: name,
-            email: email,
-            password: bcryptPassWord,
-            userAuthorization: permission,
-          });
-          const token = await newUser.generateAuthToken();
-          console.log(newUser);
-          try {
+      const checkUser = await UserModal.findOne({ email });
+      if (checkUser) {
+        res.status(400).json({
+          success: false,
+          message: "Email đã được đăng kí. Hãy chọn email khác.",
+        });
+      } else {
+        const salt = await bcrypt.genSalt(15);
+        const bcryptPassWord = await bcrypt.hash(password, salt);
+        try {
+          if (req.file && req.file.buffer) {
+            const fileData = req.file.buffer;
+            const newUser = new UserModal({
+              avatar: { data: fileData, contentType: req.file.mimetype },
+              name: name,
+              email: email,
+              password: bcryptPassWord,
+              userAuthorization: permission,
+            });
+            const token = await newUser.generateAuthToken();
+            newUser.token = token;
+
             await newUser.save();
-            res.redirect(
-              "/users?alertSuccess=" +
-                encodeURIComponent("Thêm người dùng thành công.")
-            );
-          } catch (err) {
-            res.redirect(
-              "/users?alertErr=" +
-                encodeURIComponent("Đã có lỗi xảy ra. Hãy thử lại.")
-            );
+            res.status(201).json({
+              success: true,
+              message: "Thêm người dùng thành công.",
+            });
+          } else {
+            const newUser = new UserModal({
+              avatar: { data: "", contentType: "" },
+              name: name,
+              email: email,
+              password: bcryptPassWord,
+              userAuthorization: permission,
+            });
+            const token = await newUser.generateAuthToken();
+            newUser.token = token;
+
+            await newUser.save();
+            res.status(201).json({
+              success: true,
+              message: "Thêm người dùng thành công.",
+            });
           }
+        } catch (err) {
+          res.status(500).json({
+            success: false,
+            message: "Đã có lỗi xảy ra. Hãy thử lại.",
+          });
         }
       }
     }
   }
 );
 
-router.get("/delete/:id", middleware, async (req, res) => {
+router.delete("/delete_user/:id", middleware, async (req, res) => {
   const userId = req.params.id;
 
-  try {
-    const deletedUser = await UserModal.findByIdAndDelete(userId);
-    if (!deletedUser) {
-      res.redirect(
-        "/users?alertErr=" +
-          encodeURIComponent("Không tìm thấy người dùng. Hãy thử lại.")
-      );
+  if (userId.length > 0) {
+    try {
+      await UserModal.findByIdAndDelete(userId);
+      res.status(201).json({
+        success: true,
+        message: "Xóa người dùng thành công.",
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: "Đã có lỗi xảy ra. Hãy thử lại.",
+      });
     }
-    res.redirect(
-      "/users?alertSuccess=" + encodeURIComponent("Xóa người dùng thành công.")
-    );
-  } catch (err) {
-    res.redirect(
-      "/users?alertErr=" + encodeURIComponent("Đã có lỗi xảy ra. Hãy thử lại.")
-    );
+  } else {
+    res.status(400).json({
+      success: false,
+      message: "Không tìm thấy người dùng. Hãy thử lại.",
+    });
   }
 });
 
-router.post(
-  "/update/:id",
-  upload.single("avatar"),
+router.put(
+  "/update_user/:id",
   middleware,
+  upload.single("avatar"),
+
   async (req, res) => {
     const userId = req.params.id;
     const { name, email } = req.body;
@@ -202,51 +217,64 @@ router.post(
     } else if (selectedValue == "user") {
       isPermission = false;
     }
-    const user = await UserModal.findOne({ _id: userId });
-    const checkUser = await UserModal.findOne({ email });
-    if (checkUser && user.email != checkUser.email) {
-      res.redirect(
-        "/users?alertErr=" +
-          encodeURIComponent("Email đã tồn tại. Không thể sửa")
-      );
+    if (!name) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập tên.",
+      });
+    } else if (!email) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email.",
+      });
+    } else if (!regex.test(email)) {
+      res.status(400).json({
+        success: false,
+        message: "Vui lòng nhập email đúng định dạng.",
+      });
     } else {
-      let updatedData = {};
-      updatedData.name = name;
-      updatedData.email = email;
-      updatedData.userAuthorization = isPermission;
-
-      if (req.file && req.file.buffer) {
-        updatedData.avatar = {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        };
-      }
-      if (name || email) {
+      if (userId.length > 0) {
         try {
-          const updateUser = await UserModal.findByIdAndUpdate(
-            userId,
-            updatedData,
-            {
-              new: true,
+          const user = await UserModal.findOne({ _id: userId });
+          const checkUser = await UserModal.findOne({ email });
+          if (checkUser && user.email != checkUser.email) {
+            res.status(400).json({
+              success: false,
+              message: "Email đã tồn tại. Không thể sửa",
+            });
+          } else {
+            let updatedData = {};
+            updatedData.name = name;
+            updatedData.email = email;
+            updatedData.userAuthorization = isPermission;
+
+            if (req.file && req.file.buffer) {
+              updatedData.avatar = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+              };
             }
-          );
-          if (!updateUser) {
-            res.redirect(
-              "/users?alertErr=" +
-                encodeURIComponent("Không tìm thấy người dùng. Hãy thử lại.")
-            );
+
+            await UserModal.findByIdAndUpdate(userId, updatedData, {
+              new: true,
+            });
+
+            res.status(201).json({
+              success: true,
+              message: "Sửa thông tin thành công.",
+            });
           }
-          console.log(updatedData);
-          res.redirect(
-            "/users?alertSuccess=" +
-              encodeURIComponent("Cập nhật người dùng thành công.")
-          );
         } catch (err) {
-          res.redirect(
-            "/users?alertErr=" +
-              encodeURIComponent("Đã có lỗi xảy ra. Hãy thử lại.")
-          );
+          res.status(500).json({
+            success: false,
+            message: "Đã có lỗi xảy ra. Hãy thử lại.",
+          });
         }
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "Không tìm thấy người dùng. Hãy thử lại",
+        });
       }
     }
   }
