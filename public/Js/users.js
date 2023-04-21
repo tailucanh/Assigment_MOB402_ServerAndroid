@@ -222,4 +222,21 @@ $(document).ready(function () {
       },
     });
   });
+
+  $("#btn-search").on("click", function (event) {
+    event.preventDefault();
+    var keyword = $("#search_input").val();
+    if (keyword === "") {
+      isAlertError("Hãy nhập từ khóa trước khi tìm kiếm.");
+    } else {
+      $("#searchUserForm").submit();
+    }
+  });
+
+  const currentUrl = window.location.href;
+  if (currentUrl.indexOf("search") !== -1) {
+    $("#sidebar, #content").toggleClass("active");
+    $(".collapse.in").toggleClass("in");
+    $("a[aria-expanded=true]").attr("aria-expanded", "true");
+  }
 });

@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <div class="container-fluid user-container">
+  <div class="container-fluid user-container" id="user-container">
     <div class="d-flex justify-content-between align-items-start mt-lg-2 ms-lg-2 me-lg-2">
       <p class="fs-3 fw-semibold"><i class="fa-solid fa-caret-right me-2"></i>Người dùng</p>
       <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#modalAdd"><i
@@ -101,13 +101,29 @@
       </div>
     </div>
 
+    <div class="search-box mb-4 mt-3">
+      <form method="GET" action="/users/search" enctype="multipart/form-data" id="searchUserForm">
+        <div class="container-fluid row">
+          <div class="col-lg-10 col-md-9 col-sm-12">
+            <input type="text" name="search_input" id="search_input" class="input-search"
+              placeholder="Tìm kiếm người dùng..." value="{{keyword}}">
+          </div>
+          <div class="col-lg-2 col-md-3 col-sx-12 d-flex justify-content-center">
+            <button type="button" class="btn button-search" id="btn-search"> <i
+                class="fa-solid fa-magnifying-glass me-2"></i>Tìm
+              kiếm</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="row mt-2 ms-lg-2 me-lg-2">
-
-      {{#if arrUsers}}
-      <div class="price-box mb-1 ms-2">
+      <div class="price-box d-flex justify-content-between mb-1 ms-2">
         <span class="fw-semibold text-body" style="--bs-text-opacity: .5;">Tổng số: <span
             class="fw-semibold fs-5 text-body" style="--bs-text-opacity: 1;">{{totalUsers}}</span></span>
+        <a href="/users"><i class="fa-solid fa-rotate fs-4"></i></a>
       </div>
+      {{#if arrUsers}}
+
       <div class="table-responsive table-container">
         <table class="table table-hover table-borderless">
           <thead>

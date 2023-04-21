@@ -280,4 +280,40 @@ router.put(
   }
 );
 
+router.get("/search", middleware, async (req, res) => {
+  const keyword = decodeURIComponent(req.query.search_input);
+  console.log(keyword);
+  const regex = new RegExp(keyword, "i");
+  console.log(regex);
+  try {
+    var arrUsers = await UserModal.find({ name: regex }).lean();
+
+    arrUsers = arrUsers.map((user, index) => {
+      user.index = index + 1;
+      return user;
+    });
+    const totalUsers = arrUsers.length;
+
+    if (arrUsers.length > 0) {
+      for (let user of arrUsers) {
+        const base64ImageAvatar = user.avatar.data.toString("base64");
+        user.avatar.data = base64ImageAvatar;
+        user.avatar.contentType = user.avatar.contentType;
+      }
+    }
+
+    res.render("users", {
+      title: "Users",
+      arrUsers,
+      totalUsers,
+      keyword,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Đã có lỗi xảy ra.Hãy thử lại",
+    });
+  }
+});
+
 module.exports = router;

@@ -212,32 +212,17 @@ $(document).ready(function () {
 
   $("#btn-search").on("click", function (event) {
     event.preventDefault();
-    var keyword = $("#searchTerm").val();
+    var keyword = $("#search_input").val();
     if (keyword === "") {
       isAlertError("Hãy nhập từ khóa trước khi tìm kiếm.");
     } else {
-      $("#searchForm").submit();
+      $("#searchProductForm").submit();
     }
   });
-
-  // $("#searchForm").submit(function (event) {
-  //   event.preventDefault();
-
-  //   var keyword = $("#searchTerm").val();
-  //   if (keyword === "") {
-  //     isAlertError("Hãy nhập từ khóa trước khi tìm kiếm.");
-  //   } else {
-  //     $.ajax({
-  //       url: "/products/search",
-  //       method: "GET",
-  //       data: { keyword: keyword },
-  //       success: function (response) {
-  //         isAlertSuccess("Thành công");
-  //       },
-  //       error: function (xhr) {
-  //         isAlertError("Thất bại");
-  //       },
-  //     });
-  //   }
-  // });
+  const currentUrl = window.location.href;
+  if (currentUrl.indexOf("search") !== -1) {
+    $("#sidebar, #content").toggleClass("active");
+    $(".collapse.in").toggleClass("in");
+    $("a[aria-expanded=true]").attr("aria-expanded", "true");
+  }
 });

@@ -234,12 +234,33 @@ router.put(
   }
 );
 
-router.get("/search", async (req, res) => {
-  const searchTerm = req.query.searchTerm;
-  console.log(searchTerm);
-  const regex = new RegExp(searchTerm.toString().trim(), "i");
+router.get("/search", middleware, async (req, res) => {
+  const keyword = decodeURIComponent(req.query.search_input);
+  console.log(keyword);
+  const regex = new RegExp(keyword, "i");
+  console.log(regex);
   try {
-    const arrProduct = await ProductModel.find({ name: regex }).lean();
+    var arrProduct = await ProductModel.find({ name: regex }).lean();
+
+    arrProduct = arrProduct.map((product, index) => {
+      product.index = index + 1;
+      return product;
+    });
+    const totalProducts = arrProduct.length;
+
+    if (arrProduct.length > 0) {
+      for (let product of arrProduct) {
+        const base64Image = product.image.data.toString("base64");
+        product.image.data = base64Image;
+      }
+    }
+
+    res.render("products", {
+      title: "Products",
+      arrProduct,
+      totalProducts,
+      keyword,
+    });
   } catch (err) {
     res.status(500).json({
       success: false,

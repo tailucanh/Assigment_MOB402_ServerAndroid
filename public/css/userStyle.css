@@ -24,3 +24,41 @@ table thead tr {
 table tbody tr {
   border-bottom: 1px solid rgb(195, 195, 195);
 }
+.input-search,
+.button-search {
+  display: block;
+
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input-search {
+  width: 100%;
+  background: #ecf0f3;
+  padding: 10px 10px 10px 20px;
+  border-radius: 50px;
+  box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+}
+
+.button-search {
+  background: #1da1f2;
+  border-radius: 20px;
+  padding: 10px 15px 10px 15px;
+  box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px white;
+  transition: 0.5s;
+}
+
+.input-search::placeholder {
+  color: gray;
+}
+
+#user-container.active {
+  width: 100%;
+}
+
+.sidebar-footer {
+  display: none;
+  visibility: hidden;
+  z-index: -1;
+}
