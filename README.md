@@ -2,7 +2,8 @@
 
 ## ![waving-hand](https://user-images.githubusercontent.com/93418649/233561926-45c13313-d81a-42d3-bfa0-374db886dfbd.png) Màn hình chào ![waving-hand-2](https://user-images.githubusercontent.com/93418649/233561937-ad61ff84-a3be-44de-92b2-43ee33b13648.png)
 
-![image](https://user-images.githubusercontent.com/93418649/227600258-520fc712-3dca-4c87-96d5-ccd8cb45603c.png)
+![image](https://user-images.githubusercontent.com/93418649/233564220-f93d608c-47d9-42b2-a9c8-d07df514a70a.png)
+
 
 ## ![key](https://user-images.githubusercontent.com/93418649/233562151-37c9a545-a6ef-44bb-8bb4-f0ab2df858d9.png) Đăng kí, đăng nhập
 
