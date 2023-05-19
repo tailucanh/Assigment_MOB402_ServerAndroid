@@ -17,6 +17,10 @@
 
 
 ## ![team-management](https://user-images.githubusercontent.com/93418649/233563683-81469403-53b7-4c4f-95aa-a06c54e13d95.png) Quản lý dữ liệu
-![image](https://user-images.githubusercontent.com/93418649/233563807-51408427-869f-42dc-860e-84a0580dee3d.png)
+[<img src="https://user-images.githubusercontent.com/93418649/233563807-51408427-869f-42dc-860e-84a0580dee3d.png" width="49%"/>](https://user-images.githubusercontent.com/93418649/233563807-51408427-869f-42dc-860e-84a0580dee3d.png)
+[<img src="https://github.com/tailucanh/Assigment_MOB402_ServerAndroid/assets/93418649/211380c1-555f-49a0-b999-c428d9d57873" width="49%"/>](https://github.com/tailucanh/Assigment_MOB402_ServerAndroid/assets/93418649/211380c1-555f-49a0-b999-c428d9d57873)
+
+https://github.com/tailucanh/Assigment_MOB402_ServerAndroid/assets/93418649/f5596a26-2c44-4eb5-9a4f-e4ac60910bd9
+
 
 ## Chi tiết xem thêm tại: 
