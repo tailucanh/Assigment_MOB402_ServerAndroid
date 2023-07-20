@@ -3,9 +3,6 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const expressHbs = require("express-handlebars");
-var flash = require("express-flash");
-const session = require("express-session");
-const { secret } = require("./helpers/api");
 var mongoose = require("mongoose");
 const { API } = require("./helpers/api");
 const routerWelcome = require("./routers/routerWelcome");
@@ -47,6 +44,7 @@ app.use("/products", routerProducts);
 app.use("/profile", routerProfile);
 app.use("/logout", routerLogout);
 app.use("/api", routerApi);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
